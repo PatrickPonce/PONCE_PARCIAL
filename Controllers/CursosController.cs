@@ -14,7 +14,6 @@ namespace PONCE_PARCIAL.Controllers
             _context = context;
         }
 
-        // GET: Cursos (Catálogo con filtros)
         public async Task<IActionResult> Index(string? nombre, int? creditosMin, int? creditosMax, TimeSpan? horaInicio, TimeSpan? horaFin)
         {
             var cursos = _context.Cursos.Where(c => c.Activo);
@@ -34,10 +33,10 @@ namespace PONCE_PARCIAL.Controllers
             if (horaFin.HasValue)
                 cursos = cursos.Where(c => c.HorarioFin <= horaFin);
 
-            return View(await cursos.ToListAsync());
+            var lista = await cursos.OrderBy(c => c.Nombre).ToListAsync();
+            return View(lista);
         }
 
-        // GET: Cursos/Detalle/5
         public async Task<IActionResult> Detalle(int id)
         {
             var curso = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == id && c.Activo);

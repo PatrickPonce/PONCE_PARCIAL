@@ -1,0 +1,21 @@
+@model PONCE_PARCIAL.Models.Curso
+
+@{
+    ViewData["Title"] = "Detalle del Curso";
+}
+
+<h2 class="mt-4">@Model.Nombre</h2>
+
+<div class="card mt-3 shadow">
+    <div class="card-body">
+        <p><strong>Código:</strong> @Model.Codigo</p>
+        <p><strong>Créditos:</strong> @Model.Creditos</p>
+        <p><strong>Cupo Máximo:</strong> @Model.CupoMaximo</p>
+        <p><strong>Horario:</strong> @($"{Model.HorarioInicio:hh\\:mm} - {Model.HorarioFin:hh\\:mm}")</p>
+        <p><strong>Activo:</strong> @(Model.Activo ? "Sí" : "No")</p>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        <a href="#" class="btn btn-success">Inscribirse</a>
+    </div>
+</div>
