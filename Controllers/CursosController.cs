@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PONCE_PARCIAL.Data;
+using PONCE_PARCIAL.Models;
 
 namespace PONCE_PARCIAL.Controllers
 {
@@ -13,12 +14,35 @@ namespace PONCE_PARCIAL.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // GET: Cursos (Catálogo con filtros)
+        public async Task<IActionResult> Index(string? nombre, int? creditosMin, int? creditosMax, TimeSpan? horaInicio, TimeSpan? horaFin)
         {
-            var cursos = await _context.Cursos
-                .Where(c => c.Activo)
-                .ToListAsync();
-            return View(cursos);
+            var cursos = _context.Cursos.Where(c => c.Activo);
+
+            if (!string.IsNullOrEmpty(nombre))
+                cursos = cursos.Where(c => c.Nombre.Contains(nombre));
+
+            if (creditosMin.HasValue)
+                cursos = cursos.Where(c => c.Creditos >= creditosMin);
+
+            if (creditosMax.HasValue)
+                cursos = cursos.Where(c => c.Creditos <= creditosMax);
+
+            if (horaInicio.HasValue)
+                cursos = cursos.Where(c => c.HorarioInicio >= horaInicio);
+
+            if (horaFin.HasValue)
+                cursos = cursos.Where(c => c.HorarioFin <= horaFin);
+
+            return View(await cursos.ToListAsync());
+        }
+
+        // GET: Cursos/Detalle/5
+        public async Task<IActionResult> Detalle(int id)
+        {
+            var curso = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == id && c.Activo);
+            if (curso == null) return NotFound();
+            return View(curso);
         }
     }
 }
