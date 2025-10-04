@@ -18,12 +18,13 @@ namespace PONCE_PARCIAL.Models
         public int CursoId { get; set; }
 
         [Required]
-        public string UsuarioId { get; set; }
+        public string UsuarioId { get; set; } = string.Empty;
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
-        public EstadoMatricula Estado { get; set; } = EstadoMatricula.Pendiente;
+        [Required]
+        public EstadoMatricula Estado { get; set; }
 
         [ForeignKey(nameof(CursoId))]
         public Curso? Curso { get; set; }
